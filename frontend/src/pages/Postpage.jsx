@@ -10,9 +10,9 @@ import {
 } from '@chakra-ui/react';
 import { BsFillThreadsFill, BsThreeDots } from 'react-icons/bs';
 import React from 'react';
-import Actions from '../components/Actions';
+import Actions from '../component/Actions';
 import { PiCheckCircleDuotone } from 'react-icons/pi';
-import Comment from '../components/Comment';
+import Comment from '../component/Comment';
 import { Link } from 'react-router-dom';
 
 const Postpage = () => {

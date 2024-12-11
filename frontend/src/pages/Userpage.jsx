@@ -1,6 +1,6 @@
 import React from 'react';
-import Userheader from '../components/Userheader';
-import Userpost from '../components/Userpost';
+import Userheader from '../component/Userheader';
+import Userpost from '../component/Userpost';
 
 const Userpage = () => {
   return (
