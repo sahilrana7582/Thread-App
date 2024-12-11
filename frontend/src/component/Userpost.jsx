@@ -12,8 +12,10 @@ import { BsThreeDots } from 'react-icons/bs';
 import { PiCheckCircleDuotone } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import Actions from './Actions';
+import { formatDistanceToNow } from 'date-fns';
+import { getTimeAgo } from '../../features/utils/getDate';
 
-const Userpost = ({ likes, comments, postImg, postTitle }) => {
+const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
   return (
     <>
       <Flex gap={8} mb={4} py={6}>
@@ -67,8 +69,10 @@ const Userpost = ({ likes, comments, postImg, postTitle }) => {
               <PiCheckCircleDuotone />
             </Flex>
 
-            <Flex alignItems="center" gap={2}>
-              <Text color="gray.500">1d</Text>
+            <Flex alignItems="center" gap={2} flex={1}>
+              <Text color="gray.500" fontSize={'sm'} w="fit-content">
+                {getTimeAgo(posted)}
+              </Text>
               <BsThreeDots />
             </Flex>
           </Flex>

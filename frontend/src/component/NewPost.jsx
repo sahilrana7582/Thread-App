@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { CiLocationOn } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
-import { usePost } from '../../../features/post/apiPost';
+import { usePost } from '../../features/apis/post/apiPost';
 import { redirect, useNavigate } from 'react-router-dom';
 
 const NewPost = () => {

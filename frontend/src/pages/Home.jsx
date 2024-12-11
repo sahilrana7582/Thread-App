@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { getPost } from '../../../features/post/apiPost';
+import { getPost } from '../../features/apis/post/apiPost';
 import { useEffect } from 'react';
 import { Flex, Text, VStack } from '@chakra-ui/react';
 import HomeSkelton from '../component/HomeSkelton';
@@ -28,6 +28,7 @@ const Home = () => {
             comments={e?.comments?.length}
             postTitle={e?.title}
             postImg={e?.media}
+            posted={e?.posted}
           />
         </>
       ))}

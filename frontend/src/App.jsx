@@ -9,6 +9,7 @@ import Footer from './component/Footer';
 import NewPost from './component/NewPost';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
+import Login from './pages/Login';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
             </Route>
 
             <Route path=":username/post/:id" element={<Postpage />}></Route>
+            <Route path="login" element={<Login />} />
           </Route>
         </Routes>
       </Flex>
