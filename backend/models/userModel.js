@@ -25,8 +25,12 @@ const userSchema = mongoose.Schema({
   lastName: {
     type: String,
   },
-  profilePicUrl: String,
+  profilePic: String,
   bio: String,
+  myPosts: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+  },
 });
 
 userSchema.pre('save', async function (next) {

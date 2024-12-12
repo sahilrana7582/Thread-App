@@ -18,12 +18,14 @@ import { FaUser } from 'react-icons/fa6';
 import { IoLogOut } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import NewPost from './NewPost';
+import { useSelector } from 'react-redux';
 
 const Footer = () => {
   const [newPost, setNewPost] = useState('false');
   const handleShowNewPost = () => {
     setNewPost(!newPost);
   };
+  const user = useSelector((state) => state.user.user);
   return (
     <Flex p={2} alignItems="center">
       <Center
@@ -36,13 +38,15 @@ const Footer = () => {
           <HiHome size={30} cursor="pointer" />
         </Link>
       </Center>
-      <Center
-        flex={1}
-        rounded={'lg'}
-        className="hover:bg-[#232222] transition-all duration-300 p-2 ease-in-out"
-      >
-        <CiSearch size={30} cursor="pointer" />
-      </Center>{' '}
+      <Link to="/search">
+        <Center
+          flex={1}
+          rounded={'lg'}
+          className="hover:bg-[#232222] transition-all duration-300 p-2 ease-in-out"
+        >
+          <CiSearch size={30} cursor="pointer" />
+        </Center>
+      </Link>{' '}
       <Center
         flex={1}
         rounded={'lg'}
@@ -75,14 +79,16 @@ const Footer = () => {
             <Avatar
               size="sm"
               name="Ryan Florence"
-              src="https://bit.ly/ryan-florence"
+              src={user?.profilePic || 'https://bit.ly/ryan-florence'}
             />
           </MenuButton>
           <MenuList>
-            <MenuItem gap={2} alignItems={'center'}>
-              <FaUser />
-              Profile
-            </MenuItem>
+            <Link to="/user">
+              <MenuItem gap={2} alignItems={'center'}>
+                <FaUser />
+                Profile
+              </MenuItem>
+            </Link>
             <Divider />
             <MenuItem gap={2} alignItems={'center'}>
               <IoLogOut />

@@ -20,8 +20,9 @@ import React from 'react';
 import { BsFillThreadsFill, BsInstagram } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { PiDotsThreeCircle } from 'react-icons/pi';
+import { useSelector } from 'react-redux';
 
-const Userheader = () => {
+const Userheader = ({ setEditProfile }) => {
   const currentUrl = window.location.href;
   const toast = useToast();
 
@@ -35,15 +36,16 @@ const Userheader = () => {
     console.log(currentUrl);
   };
   const { colorMode } = useColorMode();
+  const user = useSelector((state) => state.user.user);
   return (
     <VStack gap={4} alignItems={'start'}>
       <Flex justifyContent={'space-between'} w={'full'}>
         <Box>
           <Text fontSize="4xl" fontWeight={'bold'}>
-            Sahil Rana
+            {user?.firstName || 'First Name'} {user?.lastName || 'Last Name'}
           </Text>
           <Flex gap={2} alignItems={'center'}>
-            <Text fontSize="xl">Rana</Text>
+            <Text fontSize="xl">{user?.username}</Text>
             <Text>
               <BsFillThreadsFill size={25} />
             </Text>
@@ -58,11 +60,11 @@ const Userheader = () => {
           <Avatar
             size="2xl"
             name="Segun Adebayo"
-            src="https://bit.ly/sage-adebayo"
+            src={user?.profilePic || 'https://bit.ly/sage-adebayo'}
           />
         </Box>
       </Flex>
-      <Text fontSize="xl">Co-Founder, Chief Executive and Programmer</Text>
+      <Text fontSize="xl">{user?.bio || 'Bio....'}</Text>
 
       <Flex justifyContent={'space-between'} w="full">
         <Flex gap={2}>
@@ -94,6 +96,13 @@ const Userheader = () => {
                 />
               </MenuButton>
               <MenuList p={2} borderRadius={10}>
+                <MenuItem
+                  p={2}
+                  borderRadius={10}
+                  onClick={() => setEditProfile((prev) => !prev)}
+                >
+                  Edit Profile
+                </MenuItem>
                 <MenuItem p={2} borderRadius={10} onClick={onCopyLinkClick}>
                   Copy Link
                 </MenuItem>
