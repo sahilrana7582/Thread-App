@@ -11,7 +11,12 @@ const postRoutes = require('./routes/postRoutes');
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://thread-app-tau-gules.vercel.app',
+      'https://thread-app-sahilrana27582s-projects.vercel.app',
+      'https://thread-app-git-main-sahilrana27582s-projects.vercel.app',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     secure: true,
