@@ -39,17 +39,22 @@ exports.follow = async (req, res) => {
       return res.status(404).json({ message: 'One or both users not found' });
     }
 
-    await User.findByIdAndUpdate(byFollowUser._id, {
-      $addToSet: { following: toFollowUser._id },
-    });
+    const user = await User.findByIdAndUpdate(
+      byFollowUser._id,
+      {
+        $addToSet: { following: toFollowUser._id },
+      },
+      { new: true }
+    );
 
-    await User.findByIdAndUpdate(toFollowUser._id, {
+    const user2 = await User.findByIdAndUpdate(toFollowUser._id, {
       $addToSet: { followers: byFollowUser._id },
     });
 
     res.status(200).json({
       success: true,
-      message: 'Follow operation successful',
+      message: 'Follow Successful',
+      user,
     });
   } catch (error) {
     console.error(error);

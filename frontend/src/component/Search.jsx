@@ -10,14 +10,22 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { useSearch } from '../../features/apis/user/useEdit';
+import { useFollow, useSearch } from '../../features/apis/user/useEdit';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SearchIcon } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const Search = () => {
   const [name, setName] = useState();
   const { data, error, isLoading } = useSearch(name);
+  const { follow, data: followingData, followLoading } = useFollow(name);
+  const loginUser = useSelector((state) => state.user.user);
+
+  const handleFollow = async (name) => {
+    await follow({ byFollowId: loginUser?.username, toFollowId: name });
+    console.log(followLoading);
+  };
 
   return (
     <VStack h="2xl">
@@ -42,7 +50,15 @@ const Search = () => {
                   <Text>{user?.firstName}</Text>
                 </Center>
                 <Center>
-                  <Button>Follow</Button>
+                  <Button onClick={() => handleFollow(user?.username)}>
+                    {user?.followers.includes(loginUser?._id) ? (
+                      'Following'
+                    ) : followLoading ? (
+                      <Spinner />
+                    ) : (
+                      'Follow'
+                    )}
+                  </Button>
                 </Center>
               </Flex>
             </Flex>

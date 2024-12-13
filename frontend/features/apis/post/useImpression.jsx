@@ -1,4 +1,5 @@
 import { useToast } from '@chakra-ui/react';
+import { isPending } from '@reduxjs/toolkit';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -76,4 +77,68 @@ export const usePostInfo = (postId) => {
     },
   });
   return { data, isLoading };
+};
+
+export const usePost = (userData) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['allPosts', userData],
+    queryFn: async () => {
+      const queryParams = new URLSearchParams({
+        userData: JSON.stringify(userData),
+      });
+      const res = await fetch(
+        `${baseUrl}/post/allPost?${queryParams.toString()}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error('Error In Response Get Posts');
+      }
+
+      const data = await res.json();
+      return data;
+    },
+  });
+
+  return { data, isLoading };
+};
+
+export const useLike = () => {
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const { mutate: like, isPending } = useMutation({
+    mutationFn: async ({ postId, userId }) => {
+      const resp = await fetch(
+        `${baseUrl}/user/post/${postId}/like/${userId}`,
+        {
+          credentials: 'include',
+          method: 'PUT',
+        }
+      );
+
+      if (!resp.ok) {
+        throw new Error('Not Abled to liked');
+      }
+
+      const data = await resp.json();
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['allPosts']);
+    },
+    onError: () => {
+      toast({
+        title: 'Not Able to Like Post',
+        duration: 2000,
+        isClosable: true,
+        status: 'error',
+      });
+    },
+  });
+
+  return { like, isPending };
 };

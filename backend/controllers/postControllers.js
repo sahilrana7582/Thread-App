@@ -194,7 +194,18 @@ exports.deleteComment = async (req, res) => {
 
 exports.allPosts = async (req, res) => {
   try {
-    const post = await Post.find().populate('user');
+    const { userData } = req.query;
+
+    const parsedUserdata = JSON.parse(userData);
+    console.log(parsedUserdata);
+
+    if (!Array.isArray(parsedUserdata)) {
+      return res.status(400).json({ error: 'Invalid userdata format' });
+    }
+
+    const post = await Post.find({
+      user: { $in: parsedUserdata },
+    }).populate('user');
 
     res.status(200).json({
       success: true,

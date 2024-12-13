@@ -18,8 +18,8 @@ import { useSelector } from 'react-redux';
 
 const EditHeader = ({ setEditProfile, user }) => {
   const [profilePreview, setProfilePreview] = useState();
-  const { register, reset, setValue, handleSubmit } = useForm();
-  const { editProfile, isPending, error } = useEdit({ setEditProfile });
+  const { register, setValue, handleSubmit } = useForm();
+  const { editProfile, isPending } = useEdit({ setEditProfile });
   console.log(user, '<<<<<<<<');
 
   const onSubmit = async (data) => {

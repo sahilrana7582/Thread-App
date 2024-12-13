@@ -17,19 +17,3 @@ export const usePost = async (formData) => {
   }
 };
 
-export const getPost = async () => {
-  try {
-    const res = await fetch(`${baseUrl}/post/allPost`, {
-      method: 'GET',
-    });
-
-    if (!res.ok) {
-      throw new Error('Error In Response Get Posts');
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    throw new Error('Something Went Wrong While Getting All Posts ' + e);
-  }
-};

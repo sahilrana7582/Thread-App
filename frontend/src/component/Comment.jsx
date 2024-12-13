@@ -1,12 +1,10 @@
-import { Avatar, Box, Divider, Flex, Image, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Avatar, Box, Divider, Flex, Text } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { BsThreeDots } from 'react-icons/bs';
-import Actions from './Actions';
 
 const Comment = ({ commentText, user }) => {
   function formatDate(date) {
-    return format(date, 'dd/MM/yyyy'); 
+    return format(date, 'dd/MM/yyyy');
   }
   return (
     <>

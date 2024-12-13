@@ -1,14 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { getPost } from '../../features/apis/post/apiPost';
 import { VStack } from '@chakra-ui/react';
 import HomeSkelton from '../component/HomeSkelton';
 import Userpost from '../component/Userpost';
+import { usePost } from '../../features/apis/post/useImpression';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['allPosts'],
-    queryFn: getPost,
-  });
+  const { following, _id } = useSelector((state) => state.user.user);
+  const search = [...following, _id];
+  const { data, isLoading } = usePost(search);
   return (
     <VStack maxH="4xl" overflow="auto">
       {isLoading && (
@@ -28,6 +27,7 @@ const Home = () => {
             postId={e?._id}
             user={e?.user}
             likes={e?.likeCount}
+            likeArray={e?.likes}
             comments={e?.comments?.length}
             postTitle={e?.title}
             postImg={e?.media}

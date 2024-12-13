@@ -1,7 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { loginReducer } from '../../slices/authSlice';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -57,7 +56,7 @@ export const useEdit = ({ setEditProfile }) => {
 
 export const useSearch = (name) => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ['registeredUser', name],
+    queryKey: [name],
     queryFn: async () => {
       if (!name) {
         throw new Error('Name is required for searching');
@@ -103,4 +102,51 @@ export const useProfile = (username) => {
   });
 
   return { data, isLoading, error };
+};
+
+export const useFollow = (name) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const {
+    mutate: follow,
+    data,
+    isPending: followLoading,
+  } = useMutation({
+    mutationFn: async ({ byFollowId, toFollowId }) => {
+      const resp = await fetch(
+        `${baseUrl}/user/follow/${byFollowId}/${toFollowId}`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+        }
+      );
+      if (!resp.ok) {
+        throw new Error('Not Able To Follow');
+      }
+
+      const data = await resp.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      toast({
+        title: `Followed`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch(loginReducer(data?.user));
+      queryClient.invalidateQueries([`${name}`]);
+    },
+    onError: () => {
+      toast({
+        title: `Something Went Wrong`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
+
+  return { follow, followLoading, data };
 };

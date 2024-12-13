@@ -21,6 +21,7 @@ const Userpost = ({
   postImg,
   posted,
   postId,
+  likeArray,
 }) => {
   return (
     <>
@@ -98,7 +99,12 @@ const Userpost = ({
           </Link>
 
           <Flex flexDirection={'column'} gap={2} p="2">
-            <Actions likes={likes} comments={comments} postId={postId} />
+            <Actions
+              likes={likes}
+              comments={comments}
+              postId={postId}
+              likeArray={likeArray}
+            />
           </Flex>
         </Flex>
       </Flex>
