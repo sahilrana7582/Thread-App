@@ -22,28 +22,26 @@ const {
   getUser,
 } = require('../controllers/userControllers');
 const User = require('../models/userModel');
-const { isAuth } = require('../middlewares/isAuth');
+const { isAuth } = require('../utils/isAuth');
 
 const userRoutes = exress.Router();
 
 userRoutes.route('/').get(isAuth, async (req, res) => {
-  console.log(req.id, '<<<<<<<<cookies');
-  // try {
-  //   const user = await User.findOne({ username: req.params.username })
-  //     .populate('following')
-  //     .populate('followers')
-  //     .populate('posts');
-  //   console.log(user);
-  //   res.status(200).json({
-  //     success: true,
-  //     user,
-  //   });
-  // } catch (e) {
-  //   res.status(500).json({
-  //     success: true,
-  //     message: 'Something Went Wrong' + e,
-  //   });
-  // }
+  try {
+    const user = await User.findOne({ _id: req.id })
+      .populate('following')
+      .populate('followers')
+      .populate('posts');
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: true,
+      message: 'Something Went Wrong' + e,
+    });
+  }
 });
 
 userRoutes.route('/signup').post(signUp);

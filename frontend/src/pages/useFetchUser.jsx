@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { loginReducer } from '../../features/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -21,12 +23,13 @@ export const useFetchUser = () => {
         throw new Error('Failed to fetch user');
       }
 
-      return res.json();
+      const { success, user } = await res.json();
+      dispatch(loginReducer(user));
+      return success;
     },
     enabled: false,
-    onSuccess: (data) => {
-      dispatch(loginReducer(data));
-    },
+
+    staleTime: 0,
   });
 
   useEffect(() => {

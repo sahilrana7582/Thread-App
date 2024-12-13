@@ -7,10 +7,13 @@ import { useProfile } from '../../features/apis/user/useEdit';
 import { useSelector } from 'react-redux';
 import Postpage from './Postpage';
 import { useGetAllPost } from '../../features/apis/user/useGetAllPost';
+import { useFetchUser } from './useFetchUser';
 
 const Userpage = () => {
   const [editProfile, setEditProfile] = useState(false);
   const userData = useSelector((state) => state.user.user);
+  useFetchUser();
+
   const url = window.location.href.split('/').pop();
 
   let searchName = url == 'myProfile' ? userData?.username : url;

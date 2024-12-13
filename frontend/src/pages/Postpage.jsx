@@ -25,7 +25,7 @@ const Postpage = ({ username }) => {
   }
   const { data, isLoading } = usePostInfo(args);
   return (
-    <VStack>
+    <VStack minH="2xl">
       {isLoading ? (
         <Spinner />
       ) : (

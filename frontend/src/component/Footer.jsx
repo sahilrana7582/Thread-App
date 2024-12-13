@@ -89,7 +89,7 @@ const Footer = () => {
             <Divider />
             <MenuItem gap={2} alignItems={'center'} onClick={logout}>
               <IoLogOut />
-              {isLoading ? <Spinner /> : 'Logout'}
+              {isLoading ? <Spinner /> : user ? 'Logout' : 'Login'}
             </MenuItem>
           </MenuList>
         </Menu>
