@@ -11,11 +11,16 @@ import { useGetAllPost } from '../../features/apis/user/useGetAllPost';
 const Userpage = () => {
   const [editProfile, setEditProfile] = useState(false);
   const userData = useSelector((state) => state.user.user);
-  const { data, isLoading } = useProfile(userData?.username);
+  const url = window.location.href.split('/').pop();
+
+  let searchName = url == 'myProfile' ? userData?.username : url;
+
+  const { data, isLoading } = useProfile(searchName);
   const [toggle, setToggle] = useState('threads');
 
   const user = data?.user;
   const { data: userPosts, isFetching } = useGetAllPost(user?._id);
+  console.log(userPosts);
 
   return (
     <>
@@ -39,18 +44,21 @@ const Userpage = () => {
                 No Threads Yet!
               </h1>
             ) : (
-              userPosts?.map((e) => (
-                <Userpost
-                  key={e._id}
-                  postId={e?._id}
-                  user={e?.user}
-                  likes={e?.likeCount}
-                  comments={e?.comments?.length}
-                  postTitle={e?.title}
-                  postImg={e?.media}
-                  posted={e?.posted}
-                />
-              ))
+              userPosts?.map((e) => {
+                return (
+                  <Userpost
+                    key={e._id}
+                    postId={e?._id}
+                    user={e?.user}
+                    likes={e?.likeCount}
+                    comments={e?.comments?.length}
+                    postTitle={e?.title}
+                    postImg={e?.media}
+                    posted={e?.posted}
+                    likeArray={e?.likes}
+                  />
+                );
+              })
             )}
           </>
         ) : (

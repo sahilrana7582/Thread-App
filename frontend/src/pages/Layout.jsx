@@ -5,6 +5,7 @@ import { Container } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
+  console.log('Home');
   return (
     <Container maxW="620px">
       <Header />

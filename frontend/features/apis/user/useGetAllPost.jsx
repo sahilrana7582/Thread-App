@@ -3,10 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 const baseUrl = import.meta.env.VITE_API_URL;
 
 export const useGetAllPost = (userId) => {
+  console.log(userId, '>>>>>>>>');
   const { data, isFetching } = useQuery({
     queryKey: ['userPosts', userId],
     queryFn: async () => {
-      const resp = await fetch(`${baseUrl}/user/post/${userId}`, {
+      const resp = await fetch(`${baseUrl}/user/allPosts/${userId}`, {
         credentials: 'include',
         method: 'GET',
       });

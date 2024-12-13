@@ -32,7 +32,7 @@ const Postpage = ({ username }) => {
         <>
           <Flex w="full" justifyContent="space-between">
             <Flex gap={2}>
-              <Link to="/ksksk">
+              <Link to={`/${data?.user?.username}`}>
                 <Avatar name="Prosper Otemuyiwa" src={data?.user?.profilePic} />
               </Link>
               <Flex alignItems="center" gap={2}>
@@ -66,6 +66,7 @@ const Postpage = ({ username }) => {
                 likes={data?.likeCount}
                 comments={data?.comments.length}
                 postId={data?._id}
+                likeArray={data?.likes}
               />
             </Flex>
             <Divider />

@@ -21,11 +21,29 @@ const {
   follow,
   getUser,
 } = require('../controllers/userControllers');
+const User = require('../models/userModel');
+const { isAuth } = require('../middlewares/isAuth');
 
 const userRoutes = exress.Router();
 
-userRoutes.route('/').post((req, res) => {
-  res.send('Working');
+userRoutes.route('/').get(isAuth, async (req, res) => {
+  console.log(req.id, '<<<<<<<<cookies');
+  // try {
+  //   const user = await User.findOne({ username: req.params.username })
+  //     .populate('following')
+  //     .populate('followers')
+  //     .populate('posts');
+  //   console.log(user);
+  //   res.status(200).json({
+  //     success: true,
+  //     user,
+  //   });
+  // } catch (e) {
+  //   res.status(500).json({
+  //     success: true,
+  //     message: 'Something Went Wrong' + e,
+  //   });
+  // }
 });
 
 userRoutes.route('/signup').post(signUp);
@@ -38,7 +56,7 @@ userRoutes.route('/search').get(getAllUsers);
 userRoutes.route('/:username').get(getUser);
 
 userRoutes.route('/newpost').post(upload.single('media'), createNewPost);
-userRoutes.route('/post/:id').get(getUserAllPosts);
+userRoutes.route('/allPosts/:id').get(getUserAllPosts);
 userRoutes.route('/post/:postId/like/:userId').put(likePost).patch(unLike);
 userRoutes.route('/editProfile').put(upload.single('profilePic'), editProfile);
 userRoutes

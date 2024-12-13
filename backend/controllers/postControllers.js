@@ -52,10 +52,14 @@ exports.getUserAllPosts = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const posts = await Post.find({ _id: id })
+
+
+    const posts = await Post.find({ user: id })
       .populate('likes', 'username -_id')
       .populate('user')
       .populate('comments.user');
+
+
 
     res.status(200).json({
       success: true,
@@ -72,7 +76,6 @@ exports.getUserAllPosts = async (req, res) => {
 exports.likePost = async (req, res) => {
   try {
     const { postId, userId } = req.params;
-    console.log(req.params);
 
     const post = await Post.findOneAndUpdate(
       {
@@ -87,7 +90,6 @@ exports.likePost = async (req, res) => {
       },
       { new: true }
     );
-    console.log(post);
 
     res.status(200).json({
       success: true,
@@ -104,7 +106,6 @@ exports.likePost = async (req, res) => {
 exports.unLike = async (req, res) => {
   try {
     const { postId, userId } = req.params;
-    console.log(req.params);
 
     const post = await Post.findOneAndUpdate(
       {
@@ -119,7 +120,6 @@ exports.unLike = async (req, res) => {
       },
       { new: true }
     );
-    console.log(post);
 
     res.status(200).json({
       success: true,
@@ -137,7 +137,6 @@ exports.newComment = async (req, res) => {
   try {
     const { commentText } = req.body;
     const { postId, userId } = req.params;
-    console.log(req.body, req.params);
 
     const post = await Post.findOneAndUpdate(
       {
@@ -197,7 +196,6 @@ exports.allPosts = async (req, res) => {
     const { userData } = req.query;
 
     const parsedUserdata = JSON.parse(userData);
-    console.log(parsedUserdata);
 
     if (!Array.isArray(parsedUserdata)) {
       return res.status(400).json({ error: 'Invalid userdata format' });

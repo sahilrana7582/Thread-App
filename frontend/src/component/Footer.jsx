@@ -21,6 +21,7 @@ import { Link } from 'react-router-dom';
 import NewPost from './NewPost';
 import { useSelector } from 'react-redux';
 import { useLogout } from '../../features/apis/auth/useLogin';
+import { SearchIcon } from 'lucide-react';
 
 const Footer = () => {
   const [newPost, setNewPost] = useState('false');
@@ -47,7 +48,7 @@ const Footer = () => {
           rounded={'lg'}
           className="hover:bg-[#232222] transition-all duration-300 p-2 ease-in-out"
         >
-          <CiSearch size={30} cursor="pointer" />
+          <SearchIcon size={30} cursor="pointer" />
         </Center>
       </Link>{' '}
       <Center
@@ -66,13 +67,6 @@ const Footer = () => {
       <Center
         flex={1}
         rounded={'lg'}
-        className="hover:bg-[#232222] transition-all duration-300 p-2 ease-in-out"
-      >
-        <FaHeart size={30} cursor="pointer" />
-      </Center>
-      <Center
-        flex={1}
-        rounded={'lg'}
         className={
           'hover:bg-[#232222] transition-all duration-300 p-2 ease-in-out'
         }
@@ -86,7 +80,7 @@ const Footer = () => {
             />
           </MenuButton>
           <MenuList>
-            <Link to={`${user?.username}`}>
+            <Link to={`${user?.username}/myProfile`}>
               <MenuItem gap={2} alignItems={'center'}>
                 <FaUser />
                 Profile

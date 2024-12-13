@@ -9,8 +9,10 @@ import Layout from './pages/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Search from './component/Search';
+import { useFetchUser } from './pages/useFetchUser';
 
 const App = () => {
+  useFetchUser();
   return (
     <>
       <Flex flexDirection="column" overflow="auto" className="max-h-screen">
@@ -20,6 +22,7 @@ const App = () => {
             <Route path="/">
               <Route path=":username">
                 <Route index element={<Userpage />} />
+                <Route path="myProfile" element={<Userpage />} />
               </Route>
               <Route path="search" element={<Search />}></Route>
 
