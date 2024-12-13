@@ -1,11 +1,12 @@
 import { useToast } from '@chakra-ui/react';
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { loginReducer } from '../../slices/authSlice';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 const baseUrl = import.meta.env.VITE_API_URL;
 
 export const useEdit = ({ setEditProfile }) => {
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const toast = useToast();
   const {
@@ -38,6 +39,7 @@ export const useEdit = ({ setEditProfile }) => {
       });
 
       dispatch(loginReducer(user));
+      queryClient.invalidateQueries(['loginProfile']);
       setEditProfile((prev) => !prev);
     },
     onError: () => {
@@ -77,4 +79,28 @@ export const useSearch = (name) => {
   });
 
   return { data, error, isLoading };
+};
+
+export const useProfile = (username) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['loginProfile', username],
+    queryFn: async () => {
+      const resp = await fetch(`${baseUrl}/user/${username}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!resp.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
+
+      const data = await resp.json();
+      return data;
+    },
+    onError: (err) => {
+      console.error('Error fetching profile:', err);
+    },
+  });
+
+  return { data, isLoading, error };
 };

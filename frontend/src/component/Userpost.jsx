@@ -7,15 +7,21 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import React from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { PiCheckCircleDuotone } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import Actions from './Actions';
-import { formatDistanceToNow } from 'date-fns';
 import { getTimeAgo } from '../../features/utils/getDate';
 
-const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
+const Userpost = ({
+  user,
+  likes,
+  comments,
+  postTitle,
+  postImg,
+  posted,
+  postId,
+}) => {
   return (
     <>
       <Flex gap={8} mb={4} py={6}>
@@ -27,7 +33,7 @@ const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
           <Avatar
             size="md"
             name="Segun Adebayo"
-            src="https://bit.ly/sage-adebayo"
+            src={user?.profilePic || 'https://bit.ly/sage-adebayo'}
           />
 
           <Box w="1px" h="full" bg="gray.light" my={4}></Box>
@@ -64,7 +70,7 @@ const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
           <Flex justifyContent="space-between" alignItems="center" w="full">
             <Flex alignItems={'center'} w="full" gap={1}>
               <Text fontSize="lg" fontWeight="bold">
-                Sahil
+                {user?.username}
               </Text>
               <PiCheckCircleDuotone />
             </Flex>
@@ -76,7 +82,7 @@ const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
               <BsThreeDots />
             </Flex>
           </Flex>
-          <Link to="/mark/post/1234">
+          <Link to={`/${user?.username}/post/${postId}`}>
             <Text>{postTitle}</Text>
 
             {postImg ? (
@@ -91,8 +97,8 @@ const Userpost = ({ likes, comments, postImg, postTitle, posted }) => {
             ) : null}
           </Link>
 
-          <Flex>
-            <Actions likes={likes} comments={comments} />
+          <Flex flexDirection={'column'} gap={2} p="2">
+            <Actions likes={likes} comments={comments} postId={postId} />
           </Flex>
         </Flex>
       </Flex>

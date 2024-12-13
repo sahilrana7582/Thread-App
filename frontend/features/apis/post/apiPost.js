@@ -19,7 +19,7 @@ export const usePost = async (formData) => {
 
 export const getPost = async () => {
   try {
-    const res = await fetch(`${baseUrl}/user/allPost`, {
+    const res = await fetch(`${baseUrl}/post/allPost`, {
       method: 'GET',
     });
 

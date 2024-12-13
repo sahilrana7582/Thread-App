@@ -1,17 +1,15 @@
 const mongoose = require('mongoose');
 const { uploadMedia } = require('../utils/cloudinary');
 const Post = require('../models/postModel');
-const Comment = require('../models/commentModel');
 const { populate } = require('dotenv');
+const User = require('../models/userModel');
 const { ObjectId } = require('mongoose').Types;
 
 exports.createNewPost = async (req, res) => {
   try {
-    const { title } = req.body;
-    userId = '675818ca83760c40c58e0f0c';
+    const { title, userId } = req.body;
     const file = req.file;
-    console.log(file);
-    console.log(req.body);
+
     const mediaRes = await uploadMedia(file.path);
 
     if (!mediaRes) {
@@ -34,6 +32,10 @@ exports.createNewPost = async (req, res) => {
       });
     }
 
+    await User.findByIdAndUpdate(userId, {
+      $push: { posts: post._id },
+    });
+
     res.status(200).json({
       success: true,
       message: 'Post Created',
@@ -49,25 +51,11 @@ exports.createNewPost = async (req, res) => {
 exports.getUserAllPosts = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid post ID',
-      });
-    }
-
-    const posts = await Post.find()
+    const posts = await Post.find({ _id: id })
       .populate('likes', 'username -_id')
-      .populate({
-        path: 'comments',
-        populate: {
-          path: 'userId',
-          model: 'User',
-          select: 'username',
-        },
-      });
+      .populate('user')
+      .populate('comments.user');
 
     res.status(200).json({
       success: true,
@@ -147,9 +135,9 @@ exports.unLike = async (req, res) => {
 
 exports.newComment = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { commentText } = req.body;
     const { postId, userId } = req.params;
-    const comment = await Comment.create({ text, userId, postId });
+    console.log(req.body, req.params);
 
     const post = await Post.findOneAndUpdate(
       {
@@ -157,13 +145,14 @@ exports.newComment = async (req, res) => {
       },
       {
         $push: {
-          comments: new ObjectId(comment._id),
+          comments: { user: userId, commentText: commentText },
         },
-      }
+      },
+      { new: true }
     );
     res.status(200).json({
       success: true,
-      message: 'Commented',
+      postId: post._id,
     });
   } catch (e) {
     res.status(500).json({
@@ -205,7 +194,32 @@ exports.deleteComment = async (req, res) => {
 
 exports.allPosts = async (req, res) => {
   try {
-    const post = await Post.find();
+    const post = await Post.find().populate('user');
+
+    res.status(200).json({
+      success: true,
+      post,
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: 'Something Went Wrong' + e,
+    });
+  }
+};
+
+exports.getPost = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findOne({ _id: id })
+      .populate('user')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+          model: 'User',
+        },
+      });
 
     res.status(200).json({
       success: true,

@@ -7,6 +7,7 @@ const dbConnect = require('./utils/dbConnect');
 dotenv.config();
 const app = express();
 const cookieParser = require('cookie-parser');
+const postRoutes = require('./routes/postRoutes');
 
 app.use(
   cors({
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/post', postRoutes);
 
 app.listen(PORT, () => {
   dbConnect();

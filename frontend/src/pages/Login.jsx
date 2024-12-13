@@ -1,5 +1,4 @@
-import { Flex, Spinner, Text, useColorMode, useToast } from '@chakra-ui/react';
-import React from 'react';
+import { Flex, Spinner } from '@chakra-ui/react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,18 +17,15 @@ import { useSignUp } from '../../features/apis/auth/auth';
 import { useLogin } from '../../features/apis/auth/useLogin';
 
 const Login = () => {
-  const toast = useToast();
-
-  const { colorMode } = useColorMode();
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
+    formState: { errors },
   } = useForm();
 
   const { signup, isPending } = useSignUp();
-  const { login, error, isPending: loginPending } = useLogin();
+  const { login, isPending: loginPending } = useLogin();
 
   const onSubmit = async (data, type) => {
     try {
@@ -38,7 +34,7 @@ const Login = () => {
     } catch (e) {
       console.warn(e);
     } finally {
-      //   reset();
+      reset();
     }
   };
   return (
@@ -115,10 +111,7 @@ const Login = () => {
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, you'll be logged out.
-              </CardDescription>
+              <CardTitle>Login</CardTitle>
             </CardHeader>
             <form onSubmit={handleSubmit((data) => onSubmit(data, 'login'))}>
               <CardContent className="space-y-2">

@@ -8,6 +8,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { HiHome } from 'react-icons/hi2';
@@ -19,6 +20,7 @@ import { IoLogOut } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import NewPost from './NewPost';
 import { useSelector } from 'react-redux';
+import { useLogout } from '../../features/apis/auth/useLogin';
 
 const Footer = () => {
   const [newPost, setNewPost] = useState('false');
@@ -26,6 +28,7 @@ const Footer = () => {
     setNewPost(!newPost);
   };
   const user = useSelector((state) => state.user.user);
+  const { logout, isLoading } = useLogout();
   return (
     <Flex p={2} alignItems="center">
       <Center
@@ -83,16 +86,16 @@ const Footer = () => {
             />
           </MenuButton>
           <MenuList>
-            <Link to="/user">
+            <Link to={`${user?.username}`}>
               <MenuItem gap={2} alignItems={'center'}>
                 <FaUser />
                 Profile
               </MenuItem>
             </Link>
             <Divider />
-            <MenuItem gap={2} alignItems={'center'}>
+            <MenuItem gap={2} alignItems={'center'} onClick={logout}>
               <IoLogOut />
-              Logout
+              {isLoading ? <Spinner /> : 'Logout'}
             </MenuItem>
           </MenuList>
         </Menu>

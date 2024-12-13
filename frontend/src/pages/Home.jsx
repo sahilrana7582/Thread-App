@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import { getPost } from '../../features/apis/post/apiPost';
-import { useEffect } from 'react';
-import { Flex, Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import HomeSkelton from '../component/HomeSkelton';
 import Userpost from '../component/Userpost';
 
 const Home = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['allPosts'],
     queryFn: getPost,
   });
@@ -16,14 +14,19 @@ const Home = () => {
       {isLoading && (
         <>
           {' '}
-          <HomeSkelton />
-          <HomeSkelton />
+          {Array.from({ length: 5 })
+            .fill(Math.random())
+            .map(() => (
+              <HomeSkelton key={Math.random() * 10} />
+            ))}
         </>
       )}
-      {data?.post.map((e) => (
+      {data?.post.map((e, ind) => (
         <>
           <Userpost
-            key={e?._id}
+            key={ind}
+            postId={e?._id}
+            user={e?.user}
             likes={e?.likeCount}
             comments={e?.comments?.length}
             postTitle={e?.title}

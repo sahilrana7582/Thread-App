@@ -56,3 +56,48 @@ export const useLogin = () => {
 
   return { login, isPending, isError, error };
 };
+export const useLogout = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const {
+    mutate: logout,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async () => {
+      const resp = await fetch(`${baseUrl}/user/logout`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!resp.ok) {
+        const errorData = await resp.json();
+        throw new Error(errorData.message || 'Failed to logout');
+      }
+
+      return resp.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: `Logged Out`,
+        duration: 2000,
+        status: 'success',
+        isClosable: true,
+      });
+      navigate('/login');
+    },
+    onError: (error) => {
+      toast({
+        title: 'Logout failed:',
+        description: error.message,
+        duration: 3000,
+        status: 'error',
+        isClosable: true,
+      });
+    },
+  });
+
+  return { logout, isLoading, isError, error, isSuccess };
+};

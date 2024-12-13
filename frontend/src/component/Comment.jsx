@@ -4,20 +4,23 @@ import { format } from 'date-fns';
 import { BsThreeDots } from 'react-icons/bs';
 import Actions from './Actions';
 
-const Comment = ({ likes, comments }) => {
+const Comment = ({ commentText, user }) => {
   function formatDate(date) {
-    return format(date, 'dd/MM/yyyy'); // Customize the format as needed
+    return format(date, 'dd/MM/yyyy'); 
   }
   return (
     <>
       <Flex w="full" gap={4} alignItems="center">
-        <Avatar name="Prosper Otemuyiwa" src="https://bit.ly/prosper-baba" />
+        <Avatar
+          name="Prosper Otemuyiwa"
+          src={user?.profilePic || 'https://bit.ly/prosper-baba'}
+        />
         <Flex w="full">
           <Flex flex={1} flexDirection="column" gap={2}>
             <Box>
               <Flex alignItems="center" justifyContent="space-between">
                 <Text fontWeight="semibold" fontSize="lg">
-                  mrsatan{' '}
+                  {user?.username}{' '}
                   <span className="text-xs text-gray-600">
                     {formatDate(new Date(Date.now()))}
                   </span>
@@ -29,9 +32,8 @@ const Comment = ({ likes, comments }) => {
                   />
                 </div>
               </Flex>
-              <Text>This is The Comment</Text>
+              <Text>{commentText}</Text>
             </Box>
-            <Actions likes={likes} comments={comments} />
           </Flex>
         </Flex>
       </Flex>

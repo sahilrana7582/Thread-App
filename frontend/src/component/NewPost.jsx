@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Avatar,
   Box,
@@ -18,18 +18,15 @@ import { useMutation } from '@tanstack/react-query';
 import { CiLocationOn } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
 import { usePost } from '../../features/apis/post/apiPost';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const NewPost = () => {
   const [picPreview, setPicPreview] = useState();
+  const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const toast = useToast();
-  const {
-    mutate: newPost,
-    isSuccess,
-    isPending,
-    isError,
-  } = useMutation({
+  const { mutate: newPost, isPending } = useMutation({
     mutationFn: usePost,
     onSuccess: () => {
       toast({
@@ -40,7 +37,7 @@ const NewPost = () => {
       });
       navigate('/');
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: 'Something Went Wrong.',
         status: 'error',
@@ -56,6 +53,7 @@ const NewPost = () => {
     const formData = new FormData();
     formData.append('title', data.text);
     formData.append('media', data.media[0]);
+    formData.append('userId', user?._id);
 
     await newPost(formData);
   };
